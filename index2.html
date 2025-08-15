@@ -1,27 +1,3 @@
-<!-- Meta Pixel Code -->
-<script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '644228055335745');
-fbq('track', 'PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=644228055335745&ev=PageView&noscript=1"
-/></noscript>
-<!-- End Meta Pixel Code -->
-<script
-  src="https://cdn.utmify.com.br/scripts/utms/latest.js"
-  data-utmify-prevent-xcod-sck
-  data-utmify-prevent-subids
-  async
-  defer
-></script>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -92,6 +68,31 @@ src="https://www.facebook.com/tr?id=644228055335745&ev=PageView&noscript=1"
         }
         .btn-action:hover {
             background-position: right center;
+        }
+        @keyframes pulse-slow {
+            0%, 100% { box-shadow: 0 0 30px 10px #FFD70044; }
+            50% { box-shadow: 0 0 60px 20px #e52e71aa; }
+        }
+        .animate-pulse-slow {
+            animation: pulse-slow 2.5s infinite;
+        }
+        @keyframes dynamic-pulse {
+            0% { transform: scale(1); box-shadow: 0 0 20px 5px #FFD70066; }
+            50% { transform: scale(1.05); box-shadow: 0 0 40px 10px #ff8a00cc; }
+            100% { transform: scale(1); box-shadow: 0 0 20px 5px #FFD70066; }
+        }
+        .dynamic-pulse {
+            animation: dynamic-pulse 1.2s infinite;
+            background-image: linear-gradient(90deg, #e52e71 0%, #FFD700 50%, #e52e71 100%);
+            background-size: 200% auto;
+            color: #fffbe6;
+            text-shadow: 0 0 8px #FFD700, 0 0 2px #fff;
+        }
+        .dynamic-pulse:disabled {
+            animation: none;
+            background-image: linear-gradient(90deg, #333 0%, #444 100%);
+            color: #bbb;
+            text-shadow: none;
         }
     </style>
 </head>
@@ -243,28 +244,65 @@ src="https://www.facebook.com/tr?id=644228055335745&ev=PageView&noscript=1"
             </div>
         </section>
 
-        <!-- Deixar seu comentário -->
-        <section class="my-8 text-center">
-            <h3 class="text-lg font-bold mb-4 gold-text">Deixe seu comentário</h3>
-            <form class="flex flex-row justify-center items-center gap-2 w-full max-w-lg mx-auto">
-                <input type="text" class="flex-1 p-3 rounded-lg bg-gray-900 border-2 border-yellow-500 text-white focus:border-yellow-400 focus:ring-2 focus:ring-yellow-300 outline-none transition text-base" placeholder="Seu comentário...">
-                <button type="submit" class="px-6 py-3 rounded-full font-bold gold-text border-2 border-yellow-500 bg-black/60 hover:bg-yellow-900 transition-all duration-200 shadow-lg text-base flex items-center gap-2">
-                    <i class="fas fa-paper-plane"></i>
-                </button>
-            </form>
-        </section>
-
-        <!-- Final CTA -->
-        <section class="my-16 text-center">
-            <div class="border-t border-b border-yellow-500/20 py-8">
-                <h3 class="text-2xl md:text-3xl font-bold text-gray-200 mb-2">A Próxima Mensagem no Seu Celular Pode Ser Dela.</h3>
-                <p class="text-lg text-red-500 font-bold mb-6 animate-pulse">Mas enquanto você hesita, outro cara mais rápido está tomando o seu lugar.</p>
-                <a href="index3.html" class="btn-action inline-block w-full max-w-xl text-xl md:text-2xl text-white py-5 px-8 rounded-lg shadow-lg transform hover:scale-105 transition-transform">
-                    <i class="fas fa-hand-point-right mr-3"></i>
-                    EU DECIDI. ME LEVE ATÉ ELAS.
-                </a>
-                <p class="text-sm text-gray-500 mt-4">A decisão que vai mudar sua noite está a um clique.</p>
+        <!-- Deixar seu comentário (substituído por campo WhatsApp) -->
+        <section class="my-20 flex justify-center">
+            <div class="w-full max-w-lg rounded-2xl shadow-2xl border-4 border-yellow-500 bg-gradient-to-br from-pink-900 via-yellow-700 to-pink-700 animate-pulse-slow px-8 py-10 flex flex-col items-center relative">
+                <div class="absolute -top-8 left-1/2 -translate-x-1/2 flex items-center justify-center">
+                    <div class="bg-yellow-500 rounded-full w-16 h-16 flex items-center justify-center shadow-lg border-4 border-pink-700 animate-pulse">
+                        <i class="fas fa-crown text-3xl text-pink-900"></i>
+                    </div>
+                </div>
+                <h3 class="text-2xl font-bold gold-text mb-4 mt-10 drop-shadow-lg">Liberar Acesso VIP</h3>
+                <p class="text-base text-yellow-100 mb-6 font-semibold">Digite seu WhatsApp para desbloquear o acesso exclusivo às modelos.</p>
+                <form id="whatsappForm" class="w-full flex flex-col gap-4 items-center">
+                    <input type="text" id="whatsappInput" class="w-full p-4 rounded-xl bg-black/70 border-2 border-yellow-500 text-yellow-200 text-lg font-bold focus:border-pink-400 focus:ring-2 focus:ring-yellow-300 outline-none transition" placeholder="Seu WhatsApp (ex: 11999999999)">
+                    <button type="submit" id="nextBtn" class="w-full px-6 py-4 rounded-full font-bold text-white border-2 border-yellow-500 bg-gradient-to-r from-pink-500 via-yellow-400 to-pink-500 transition-all duration-200 shadow-xl text-xl flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed dynamic-pulse" disabled>
+                        <i class="fas fa-unlock-alt"></i>
+                        <span class="font-bold tracking-wide">LIBERAR ACESSO VIP E IR PARA AS MODELOS</span>
+                    </button>
+                </form>
+                <p class="text-sm text-yellow-200 mt-6 italic">Seu número é usado apenas para liberar o acesso VIP.<br>Sigilo absoluto, privacidade garantida.</p>
             </div>
+            <style>
+                @keyframes pulse-slow {
+                    0%, 100% { box-shadow: 0 0 30px 10px #FFD70044; }
+                    50% { box-shadow: 0 0 60px 20px #e52e71aa; }
+                }
+                .animate-pulse-slow {
+                    animation: pulse-slow 2.5s infinite;
+                }
+                @keyframes dynamic-pulse {
+                    0% { transform: scale(1); box-shadow: 0 0 20px 5px #FFD70066; }
+                    50% { transform: scale(1.05); box-shadow: 0 0 40px 10px #ff8a00cc; }
+                    100% { transform: scale(1); box-shadow: 0 0 20px 5px #FFD70066; }
+                }
+                .dynamic-pulse {
+                    animation: dynamic-pulse 1.2s infinite;
+                    background-image: linear-gradient(90deg, #e52e71 0%, #FFD700 50%, #e52e71 100%);
+                    background-size: 200% auto;
+                    color: #fffbe6;
+                    text-shadow: 0 0 8px #FFD700, 0 0 2px #fff;
+                }
+                .dynamic-pulse:disabled {
+                    animation: none;
+                    background-image: linear-gradient(90deg, #333 0%, #444 100%);
+                    color: #bbb;
+                    text-shadow: none;
+                }
+            </style>
+            <script>
+                const input = document.getElementById('whatsappInput');
+                const btn = document.getElementById('nextBtn');
+                input.addEventListener('input', function() {
+                    btn.disabled = !input.value.trim();
+                });
+                document.getElementById('whatsappForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    if (input.value.trim()) {
+                        window.location.href = `index3.html?whatsapp=${encodeURIComponent(input.value.trim())}`;
+                    }
+                });
+            </script>
         </section>
         
     </div>
