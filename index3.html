@@ -1,27 +1,3 @@
-<!-- Meta Pixel Code -->
-<script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '644228055335745');
-fbq('track', 'PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=644228055335745&ev=PageView&noscript=1"
-/></noscript>
-<!-- End Meta Pixel Code -->
-<script
-  src="https://cdn.utmify.com.br/scripts/utms/latest.js"
-  data-utmify-prevent-xcod-sck
-  data-utmify-prevent-subids
-  async
-  defer
-></script>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -104,16 +80,35 @@ src="https://www.facebook.com/tr?id=644228055335745&ev=PageView&noscript=1"
 <body class="text-white">
 
     <!-- Navigation Bar -->
-    <nav class="w-full flex justify-center items-center gap-2 py-1 text-xs font-bold tracking-widest uppercase rounded-b-lg mt-2 mb-6 select-none">
+    <nav class="w-full flex justify-center items-center gap-2 py-1 text-xs font-bold tracking-widest uppercase rounded-b-lg mt-2 mb-2 select-none">
         <a href="index.html" class="px-3 py-1 rounded transition-all duration-200 text-gray-400 hover:text-gray-200">Apresentação</a>
         <span class="text-gray-500">/</span>
         <a href="index2.html" class="px-3 py-1 rounded transition-all duration-200 text-gray-400 hover:text-gray-200">Sigilo</a>
         <span class="text-gray-500">/</span>
-        <a href="index3.html" class="px-3 py-1 rounded transition-all duration-200
-          bg-gradient-to-r from-pink-900 via-pink-800 to-pink-900 text-pink-200 shadow
-          ring-2 ring-pink-400/60
-          ">A Modelo</a>
+        <a href="#" id="modelo-link" class="px-3 py-1 rounded transition-all duration-200 bg-gradient-to-r from-pink-900 via-pink-800 to-pink-900 text-pink-200 shadow ring-2 ring-pink-400/60">A Modelo</a>
     </nav>
+    <script>
+        // Bloqueia acesso à página "A Modelo" se não houver WhatsApp na query
+        const params = (() => {
+            const p = {};
+            window.location.search.replace(/^\?/, '').split('&').forEach(function(pair) {
+                if (!pair) return;
+                var parts = pair.split('=');
+                p[decodeURIComponent(parts[0])] = decodeURIComponent(parts[1] || '');
+            });
+            return p;
+        })();
+        const modeloLink = document.getElementById('modelo-link');
+        if (!params.whatsapp) {
+            modeloLink.onclick = function(e) {
+                e.preventDefault();
+                document.getElementById('whatsapp-gate').scrollIntoView({behavior: 'smooth'});
+            };
+            modeloLink.style.opacity = '0.6';
+            modeloLink.style.cursor = 'not-allowed';
+            modeloLink.title = 'Digite seu WhatsApp para acessar';
+        }
+    </script>
 
     <!-- VIP Access Banner -->
     <div class="bg-black/50 text-center py-2.5 px-4 border-b border-yellow-500/20">
@@ -122,6 +117,72 @@ src="https://www.facebook.com/tr?id=644228055335745&ev=PageView&noscript=1"
             <span class="hidden sm:inline">ÁREA VIP:</span> SEU ACESSO EXCLUSIVO FOI LIBERADO.
         </p>
     </div>
+
+    <!-- Perfil do usuário integrado ao topo do layout, abaixo do menu e banner VIP -->
+<div id="user-profile" class="mx-auto mt-4 mb-2 max-w-md w-full bg-black/80 border border-yellow-700 rounded-xl px-6 py-5 shadow-xl flex flex-col items-center opacity-0 transition-all duration-700 ease-out scale-95"
+     style="animation: slideDownProfile 1s cubic-bezier(.68,-0.55,.27,1.55) forwards;">
+    <style>
+        @keyframes slideDownProfile {
+            0% { opacity: 0; transform: translateY(-30px) scale(0.95);}
+            60% { opacity: 1; transform: translateY(8px) scale(1.05);}
+            100% { opacity: 1; transform: translateY(0) scale(1);}
+        }
+    </style>
+    <div class="flex items-center gap-4 mb-2">
+        <div class="w-16 h-16 rounded-full bg-yellow-900 flex items-center justify-center border-2 border-yellow-500 shadow-lg animate-pulse">
+            <i class="fas fa-user-tie text-4xl gold-text"></i>
+        </div>
+        <div class="text-left">
+            <p id="profile-name" class="font-bold gold-text text-2xl mb-1"></p>
+            <div id="profile-whatsapp" class="flex items-center gap-2 bg-yellow-900/40 px-3 py-1 rounded-lg border border-yellow-500 shadow">
+                <i class="fab fa-whatsapp text-green-400 text-xl"></i>
+                <span class="font-mono text-yellow-200 text-lg" id="profile-whatsapp-number"></span>
+            </div>
+        </div>
+    </div>
+    <div class="w-full text-center mt-2">
+        <span class="text-gray-400 text-sm font-semibold tracking-wide">Perfil profissional exclusivo para acesso VIP</span>
+        <div class="mt-1 text-xs text-green-400 font-semibold flex items-center justify-center gap-2">
+            <i class="fas fa-lock"></i>
+            <span>Seu acesso está protegido e sigiloso</span>
+        </div>
+    </div>
+</div>
+<script>
+    // Colhe o WhatsApp da query string (enviado do index2)
+    function getQueryParams() {
+        const params = {};
+        window.location.search.replace(/^\?/, '').split('&').forEach(function(pair) {
+            if (!pair) return;
+            var parts = pair.split('=');
+            params[decodeURIComponent(parts[0])] = decodeURIComponent(parts[1] || '');
+        });
+        return params;
+    }
+    const params = getQueryParams();
+    const profileDiv = document.getElementById('user-profile');
+    if (params.whatsapp) {
+        profileDiv.style.opacity = '1';
+        profileDiv.style.pointerEvents = 'auto';
+        // WhatsApp format for display
+        const raw = params.whatsapp.replace(/\D/g, '');
+        let formatted = raw;
+        if (raw.length === 11) {
+            formatted = `(${raw.slice(0,2)}) ${raw.slice(2,7)}-${raw.slice(7)}`;
+        } else if (raw.length === 10) {
+            formatted = `(${raw.slice(0,2)}) ${raw.slice(2,6)}-${raw.slice(6)}`;
+        }
+        document.getElementById('profile-whatsapp-number').textContent = formatted || params.whatsapp;
+        if (params.nome) {
+            document.getElementById('profile-name').textContent = params.nome;
+        } else {
+            document.getElementById('profile-name').textContent = 'Visitante VIP';
+        }
+    } else {
+        profileDiv.style.opacity = '0';
+        profileDiv.style.pointerEvents = 'none';
+    }
+</script>
 
     <div class="container mx-auto max-w-7xl p-6 text-center">
 
@@ -179,10 +240,15 @@ src="https://www.facebook.com/tr?id=644228055335745&ev=PageView&noscript=1"
                             Sofia
                             <span class="inline-block w-3 h-3 rounded-full bg-green-500 border-2 border-white animate-pulse" title="Online"></span>
                         </h3>
-                        <p class="text-gray-300 my-3 h-12">A namorada carinhosa que vai te dar toda a atenção que você merece.</p>
-                        <a href="https://checkout.realpag.cloud/VCCL1O8SC02B" class="mt-4 btn-cta inline-block w-full text-lg font-bold text-white py-3 px-6 rounded-lg">
-                            CONVERSAR COM A SOFIA
-                        </a>
+                        <p class="text-gray-300 my-3 h-12">Carinhosa e atenciosa, pronta para te mimar como você merece.</p>
+                        <div class="flex flex-col gap-3 mt-4">
+                            <a href="https://checkout.realpag.cloud/VCCL1O8SC5XC" class="btn-cta inline-block w-full text-lg font-bold text-white py-3 px-6 rounded-lg">
+                                APENAS CONTEÚDO
+                            </a>
+                            <a href="https://checkout.realpag.cloud/VCCL1O8SC02B" class="btn-cta inline-block w-full text-lg font-bold text-white py-3 px-6 rounded-lg">
+                                CONTEÚDO + WHATSAPP DA MODELO
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <script>
@@ -230,10 +296,15 @@ src="https://www.facebook.com/tr?id=644228055335745&ev=PageView&noscript=1"
                             Isabela
                             <span class="inline-block w-3 h-3 rounded-full bg-green-500 border-2 border-white animate-pulse" title="Online"></span>
                         </h3>
-                        <p class="text-gray-300 my-3 h-12">Intensa e provocante, ela sabe exatamente como te levar ao limite.</p>
-                        <a href="https://checkout.realpag.cloud/VCCL1O8SC02D" class="mt-4 btn-cta inline-block w-full text-lg font-bold text-white py-3 px-6 rounded-lg">
-                            CONVERSAR COM A ISABELA
-                        </a>
+                        <p class="text-gray-300 my-3 h-12">Provocante e intensa, sabe como te levar ao limite do prazer.</p>
+                        <div class="flex flex-col gap-3 mt-4">
+                            <a href="https://checkout.realpag.cloud/VCCL1O8SC5XC" class="btn-cta inline-block w-full text-lg font-bold text-white py-3 px-6 rounded-lg">
+                                APENAS CONTEÚDO
+                            </a>
+                            <a href="https://checkout.realpag.cloud/VCCL1O8SC02D" class="btn-cta inline-block w-full text-lg font-bold text-white py-3 px-6 rounded-lg">
+                                CONTEÚDO + WHATSAPP DA MODELO
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <script>
@@ -281,10 +352,15 @@ src="https://www.facebook.com/tr?id=644228055335745&ev=PageView&noscript=1"
                             Camila
                             <span class="inline-block w-3 h-3 rounded-full bg-green-500 border-2 border-white animate-pulse" title="Online"></span>
                         </h3>
-                        <p class="text-gray-300 my-3 h-12">Camila é misteriosa e envolvente. Adora conversar sem limites, provocar com fotos e áudios e te deixar viciado em cada mensagem. Peça sua fantasia e se surpreenda.</p>
-                        <a href="https://checkout.realpag.cloud/VCCL1O8SC02E" class="mt-4 btn-cta inline-block w-full text-lg font-bold text-white py-3 px-6 rounded-lg">
-                            CONVERSAR COM A CAMILA
-                        </a>
+                        <p class="text-gray-300 my-3 h-12">Mensagens e fotos safadas pra te deixar duro. Peça sua fantasia.</p>
+                        <div class="flex flex-col gap-3 mt-4">
+                            <a href="https://checkout.realpag.cloud/VCCL1O8SC5XC" class="btn-cta inline-block w-full text-lg font-bold text-white py-3 px-6 rounded-lg">
+                                APENAS CONTEÚDO
+                            </a>
+                            <a href="https://checkout.realpag.cloud/VCCL1O8SC02E" class="btn-cta inline-block w-full text-lg font-bold text-white py-3 px-6 rounded-lg">
+                                CONTEÚDO + WHATSAPP DA MODELO
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <script>
@@ -332,10 +408,15 @@ src="https://www.facebook.com/tr?id=644228055335745&ev=PageView&noscript=1"
                             Laura
                             <span class="inline-block w-3 h-3 rounded-full bg-green-500 border-2 border-white animate-pulse" title="Online"></span>
                         </h3>
-                        <p class="text-gray-300 my-3 h-12">Laura é doce e ousada na medida certa. Gosta de surpreender com fotos, áudios safados e conversas quentes. Peça o que quiser e deixe ela te mostrar o que é prazer sem limites.</p>
-                        <a href="https://checkout.realpag.cloud/VCCL1O8SC02F" class="mt-4 btn-cta inline-block w-full text-lg font-bold text-white py-3 px-6 rounded-lg">
-                            CONVERSAR COM A LAURA
-                        </a>
+                        <p class="text-gray-300 my-3 h-12">Áudios gemendo e fotos pelada. Ousada e pronta pra te provocar.</p>
+                        <div class="flex flex-col gap-3 mt-4">
+                            <a href="https://checkout.realpag.cloud/VCCL1O8SC5XC" class="btn-cta inline-block w-full text-lg font-bold text-white py-3 px-6 rounded-lg">
+                                APENAS CONTEÚDO
+                            </a>
+                            <a href="https://checkout.realpag.cloud/VCCL1O8SC02F" class="btn-cta inline-block w-full text-lg font-bold text-white py-3 px-6 rounded-lg">
+                                CONTEÚDO + WHATSAPP DA MODELO
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <script>
@@ -383,10 +464,15 @@ src="https://www.facebook.com/tr?id=644228055335745&ev=PageView&noscript=1"
                             Vanessa
                             <span class="inline-block w-3 h-3 rounded-full bg-green-500 border-2 border-white animate-pulse" title="Online"></span>
                         </h3>
-                        <p class="text-gray-300 my-3 h-12">Vanessa é ousada e misteriosa. Ama provocar, mandar nudes e te deixar querendo mais a cada mensagem. Fale suas fantasias e prepare-se para ser surpreendido.</p>
-                        <a href="https://checkout.realpag.cloud/VCCL1O8SC02G" class="mt-4 btn-cta inline-block w-full text-lg font-bold text-white py-3 px-6 rounded-lg">
-                            CONVERSAR COM A VANESSA
-                        </a>
+                        <p class="text-gray-300 my-3 h-12">Ousada e misteriosa, ama provocar e te deixar querendo mais.</p>
+                        <div class="flex flex-col gap-3 mt-4">
+                            <a href="https://checkout.realpag.cloud/VCCL1O8SC5XC" class="btn-cta inline-block w-full text-lg font-bold text-white py-3 px-6 rounded-lg">
+                                APENAS CONTEÚDO
+                            </a>
+                            <a href="https://checkout.realpag.cloud/VCCL1O8SC02G" class="btn-cta inline-block w-full text-lg font-bold text-white py-3 px-6 rounded-lg">
+                                CONTEÚDO + WHATSAPP DA MODELO
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <script>
@@ -434,10 +520,15 @@ src="https://www.facebook.com/tr?id=644228055335745&ev=PageView&noscript=1"
                             Jessica
                             <span class="inline-block w-3 h-3 rounded-full bg-green-500 border-2 border-white animate-pulse" title="Online"></span>
                         </h3>
-                        <p class="text-gray-300 my-3 h-12">Jessica é a ruiva safada que adora provocar. Manda nudes quentes, vídeos ousados e realiza suas fantasias sem vergonha. Peça o que quiser e sinta o prazer de ser exclusivo.</p>
-                        <a href="https://checkout.realpag.cloud/VCCL1O8SC02H" class="mt-4 btn-cta inline-block w-full text-lg font-bold text-white py-3 px-6 rounded-lg">
-                            CONVERSAR COM A JESSICA
-                        </a>
+                        <p class="text-gray-300 my-3 h-12">Cacheada safada, manda nudes e realiza suas fantasias sem vergonha.</p>
+                        <div class="flex flex-col gap-3 mt-4">
+                            <a href="https://checkout.realpag.cloud/VCCL1O8SC5XC" class="btn-cta inline-block w-full text-lg font-bold text-white py-3 px-6 rounded-lg">
+                                APENAS CONTEÚDO
+                            </a>
+                            <a href="https://checkout.realpag.cloud/VCCL1O8SC02H" class="btn-cta inline-block w-full text-lg font-bold text-white py-3 px-6 rounded-lg">
+                                CONTEÚDO + WHATSAPP DA MODELO
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <script>
@@ -511,7 +602,7 @@ src="https://www.facebook.com/tr?id=644228055335745&ev=PageView&noscript=1"
                         </div>
                     </div>
                     <p class="text-lg italic">"Me apaixonei só no áudio. A voz dela é surreal, me arrepio todo. Parece que tá aqui do meu lado."</p>
-                </div>
+                </div>e
                 <!-- Testimonial 2 -->
                 <div class="bg-gray-900 bg-opacity-70 p-6 rounded-xl border border-gray-800">
                      <div class="flex items-center mb-4">
@@ -541,8 +632,9 @@ src="https://www.facebook.com/tr?id=644228055335745&ev=PageView&noscript=1"
             <h3 class="text-lg font-bold mb-4 gold-text">Deixe seu comentário</h3>
             <form class="flex flex-row justify-center items-center gap-2 w-full max-w-lg mx-auto">
                 <input type="text" class="flex-1 p-3 rounded-lg bg-gray-900 border-2 border-yellow-500 text-white focus:border-yellow-400 focus:ring-2 focus:ring-yellow-300 outline-none transition text-base" placeholder="Seu comentário...">
-                <button type="submit" class="px-6 py-3 rounded-full font-bold gold-text border-2 border-yellow-500 bg-black/60 hover:bg-yellow-900 transition-all duration-200 shadow-lg text-base flex items-center gap-2">
+                <button type="submit" class="px-6 py-3 rounded-full font-bold gold-text border-2 border-yellow-500 bg-gradient-to-r from-yellow-900 via-yellow-700 to-pink-900 hover:from-pink-900 hover:to-yellow-900 transition-all duration-200 shadow-lg text-base flex items-center gap-2">
                     <i class="fas fa-paper-plane"></i>
+                    <span>Enviar</span>
                 </button>
             </form>
         </section>
